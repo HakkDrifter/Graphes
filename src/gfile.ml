@@ -59,6 +59,24 @@ let read_comment graph line =
     Printf.printf "Unknown line:\n%s\n%!" line ;
     failwith "from_file"
 
+let export file graph = 
+
+  let ff = open_out file in
+
+  fprintf ff "digraph finite_state_machine {\n
+	rankdir=LR;\n
+	size=\"8,5\"\n
+	node [shape = doublecircle];\n
+	node [shape = circle];\n";
+
+  e_iter graph (fun id1 id2 lbl -> fprintf ff "LR_%d -> LR_%d [ label = \"%s\" ]; \n" id1 id2 lbl) ;
+
+  fprintf ff "}";
+  close_out ff ;
+  ()
+
+
+
 let from_file path =
 
   let infile = open_in path in

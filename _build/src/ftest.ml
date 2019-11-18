@@ -25,7 +25,7 @@ let () =
   let graph = from_file infile in
 
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile (Tools.clone_nodes graph) in
+  let () = write_file outfile (gmap(add_arc((gmap(graph))(int_of_string))(1)(3)(10))(Int.to_string)) ; export(outfile)(graph) in
 
   ()
 
