@@ -1,11 +1,9 @@
 open Graph
 
-type flowLabel = (int * int)
+type 'a arc = (id * id *'a)
 
-val findChains: flowLabel graph -> id -> id -> ((flowLabel out_arcs) list) list
+val findChain: int graph -> id -> id -> (int arc) list -> id list -> (int arc) list
 
-val findBestChain: ((flowLabel out_arcs) list) list -> (flowLabel out_arcs) list
+val findFlow: (int arc) list -> int 
 
-val findFlow: (flowLabel out_arcs) list -> int 
-
-val fulk: flowLabel graph -> id -> id -> flowLabel graph ;;
+val fulk: int graph -> id -> id -> int graph ;;
