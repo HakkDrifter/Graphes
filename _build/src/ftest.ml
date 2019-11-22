@@ -1,5 +1,6 @@
 open Gfile
 open Tools
+open Fulk
 
 let () =
 
@@ -22,10 +23,13 @@ let () =
   in
 
   (* Open file *)
-  let graph = from_file infile in
+  let graph = from_file infile in 
 
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile (gmap(add_arc((gmap(graph))(int_of_string))(1)(3)(10))(Int.to_string)) ; export(outfile)(graph) in
+  let () = write_file outfile (gmap(add_arc((gmap(graph))(int_of_string))(1)(3)(10))(Int.to_string)) (*; export(outfile)(graph) *) in
+
+  let res = [(2,5,3);(5,8,9)](*findChain (gmap graph int_of_string) _source _sink [] []*) in
+   List.iter (fun (x,y,z) -> Printf.printf" %d %!"x) (res) ;
 
   ()
 

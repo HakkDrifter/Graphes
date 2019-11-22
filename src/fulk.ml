@@ -1,7 +1,9 @@
 open Graph
+open Tools
+
+type 'a arc = (id * id *'a)
 
 let rec findChain gr src sink acu marked = 
-
     let rec aux out_arcs gr1 src1 sink1 acu1 marked1 = 
         match out_arcs with
         | [] -> []
@@ -16,3 +18,24 @@ let rec findChain gr src sink acu marked =
         | x::rest -> if fst x == sink then (src,fst x,snd x)::acu else aux a gr (fst x) sink ((src,fst x,snd x)::acu) (src::marked)
 
 
+let rec findFlow path =
+    match path with
+    | [] -> max_int
+    | x::rest -> match x with
+                | (a,b,c) -> min c (findFlow rest)
+
+
+
+
+let rec fulk gr src sink = 
+
+    let rec add_chain gr1 ch n =
+        (match ch with
+        | [] -> gr1
+        | (a,b,_)::rest -> add_chain (add_arc gr1 a b (Int.neg n) rest n )
+
+    in
+
+        let chain = findChain gr src sink [] [] in 
+            match (findFlow chain) with
+            | a -> Printf.printf" %d %!" a ; if a == max_int then gr else fulk (add_chain gr chain a) src sink            (* corriger add_chain plus correction de l'arc dans l'autre sens  *)

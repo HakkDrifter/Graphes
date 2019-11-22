@@ -1,5 +1,6 @@
 open Gfile
 open Tools
+open Fulk
 
 let () =
 
@@ -21,11 +22,15 @@ let () =
   and _sink = int_of_string Sys.argv.(3)
   in
 
+
+
   (* Open file *)
-  let graph = from_file infile in
+  let graph = from_file infile in 
+
+   (*List.iter (fun (x,y,z) -> Printf.printf" %d %!"x) (res) ; *)
 
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile (gmap(add_arc((gmap(graph))(int_of_string))(1)(3)(10))(Int.to_string)) ; export(outfile)(graph) in
+  let () = write_file outfile (gmap(fulk (gmap graph int_of_string) _source _sink)(Int.to_string)) (*; export(outfile)(graph) *) in
 
   ()
 
