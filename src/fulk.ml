@@ -21,8 +21,8 @@ let rec findChain gr src sink acu marked =
 let rec findFlow path =
     match path with
     | [] -> max_int
-    | x::rest -> match x with
-                | (a,b,c) -> min c (findFlow rest)
+    | x::rest -> (match x with
+                | (a,b,c) -> if c <= 0 then findFlow rest else min c (findFlow rest) ) 
 
 
 
@@ -32,7 +32,7 @@ let rec fulk gr src sink =
     let rec add_chain gr1 ch n =
         (match ch with
         | [] -> gr1
-        | (a,b,_)::rest -> add_chain (add_arc gr1 a b (Int.neg n) rest n )
+        | (a,b,_)::rest -> add_chain (add_arc (add_arc gr1 a b (Int.neg n)) b a n) rest n  )
 
     in
 
