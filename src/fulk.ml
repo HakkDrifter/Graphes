@@ -38,4 +38,7 @@ let rec fulk gr src sink =
 
         let chain = findChain gr src sink [] [] in 
             match (findFlow chain) with
-            | a -> Printf.printf" %d %!" a ; if a == max_int then gr else fulk (add_chain gr chain a) src sink            (* corriger add_chain plus correction de l'arc dans l'autre sens  *)
+            | a -> if a == max_int then gr else fulk (add_chain gr chain a) src sink           
+
+
+(*Printf.printf" %d %!" a ; *) 
