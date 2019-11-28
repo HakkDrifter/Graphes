@@ -32,7 +32,7 @@ let rec findFlow path =
     match path with
     | [] -> max_int
     | x::rest -> (match x with
-                | (a,b,c) -> if c <= 0 then findFlow rest else min c (findFlow rest) ) 
+                | (a,b,c) ->  min c (findFlow rest) ) 
 
 
 let rec fulk gr src sink = 
@@ -40,13 +40,14 @@ let rec fulk gr src sink =
     let rec add_chain gr1 ch n =
         (match ch with
         | [] -> gr1
-        | (a,b,_)::rest -> add_chain (add_arc (add_arc gr1 a b (-n)) b a n) rest n )
+        | (a,b,_)::rest -> (* Printf.printf" \n Value -> %d %!" n ; *) add_chain (add_arc (add_arc gr1 a b (-n)) b a n) rest n )
 
     in
-
-        let chain = findChain gr src sink [] [] in 
+        Printf.printf"\n --- \n%!" ; 
+        let chain = findChain gr src sink [] [] in Printf.printf"\n %!" ; List.iter (fun (x,y,z) ->(Printf.printf"chain : %d -> %d %!" x y)) (List.rev (fst chain));
             match (findFlow (fst chain)) with
-            | a -> if a == max_int then gr else fulk (add_chain gr (fst chain) a) src sink           
+            | a ->  Printf.printf"\n flow -> %d %!" a ; Printf.printf"\n %!"; e_iter gr (fun a b v -> Printf.printf" | arc: %d -> %d value: %d %!" a b v);
+            if a == max_int || a == 0 then gr else fulk (add_chain gr (fst chain) a) src sink           
 
 
 (*Printf.printf" %d %!" a ; *) 
