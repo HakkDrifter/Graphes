@@ -1,3 +1,4 @@
+
 open Graph
 open Tools
 
@@ -5,20 +6,27 @@ type 'a arc = (id * id *'a)
 
 type 'a chainRes = (('a arc) list  * id list)
 
-let rec findChain gr src sink acu marked = 
-    let rec aux out_arcs1 gr1 src1 sink1 acu1 marked1 = 
-        match out_arcs1 with
-        | [] -> ([],src::marked)
-        | x::rest -> Printf.printf"aux : %d -> %d \n %!" src1 (fst x) ; if (fst x) == sink1 then ((src1,fst x,snd x)::acu,src1::marked) else if List.exists (fun a -> fst x == a) marked1 then aux rest gr1 (fst x) sink1 acu1 (src1::marked1) else let res = findChain gr1 src1 sink1 acu1 (src1::marked1) in if (fst res) == [] then let newMarked = List.append(snd res) (src1::marked1) in (aux rest gr1 src1 sink1 acu1 newMarked)  else res
+let rec chainIterator arcs gr src(*used only to form arc if sink found*) sink acu marked = 
 
-    in
+let aux grA srcA sinkA acuA markedA = 
+    let arcs = out_arcs grA srcA in
+    match arcs with 
+    | [] -> ([],markedA)
+    | x::rest -> chainIterator arcs grA srcA sinkA acuA markedA
+in 
 
-    
-    let a = out_arcs gr src in List.iter (fun (x,y) -> Printf.printf"outarcs : %d \n %!"x) (a) ; 
-        match a with 
-        | [] -> ([],src::marked)
-        | x::rest -> Printf.printf"chain : %d -> %d \n %!" src (fst x); if fst x == sink then ((src,fst x,snd x)::acu,src::marked)  else aux a gr (fst x) sink ((src,fst x,snd x)::acu) (src::marked)
+    match arcs with 
+    | [] -> ([],marked) (*when all arcs have been iterated *)
+    | x::rest -> if (fst x) == sink then ((src,fst x,snd x)::acu,[]) else (*Found -> return result*)
+    if List.exists (fun a -> fst x == a) marked then chainIterator rest gr src sink acu ((fst x)::marked) else (*Iterate on next arc with updated marked*)
+    let res = aux gr (fst x) sink ((src,fst x,snd x)::acu) ((fst x)::marked) in  if (fst res) == [] then chainIterator rest gr src sink acu ((fst x)::marked) (*No result deeper ; Iterate on next arc with updated marked*)
+    else res (* Forward result*)
 
+
+ 
+let findChain gr src sink acu marked = 
+    if src == sink then ([],[])
+    else chainIterator (out_arcs gr src) gr src sink acu (src::marked)
 
 let rec findFlow path =
     match path with
@@ -27,14 +35,12 @@ let rec findFlow path =
                 | (a,b,c) -> if c <= 0 then findFlow rest else min c (findFlow rest) ) 
 
 
-(*Find chain ne marche pas pour noeud lié par un arc *)
-
 let rec fulk gr src sink = 
 
     let rec add_chain gr1 ch n =
         (match ch with
         | [] -> gr1
-        | (a,b,_)::rest -> add_chain (add_arc (add_arc gr1 a b (Int.neg n)) b a n) rest n  )
+        | (a,b,_)::rest -> add_chain (add_arc (add_arc gr1 a b (-n)) b a n) rest n )
 
     in
 
