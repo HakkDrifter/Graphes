@@ -2,7 +2,9 @@ open Graph
 
 type 'a arc = (id * id *'a)
 
-val findChain: int graph -> id -> id -> (int arc) list -> id list -> (int arc) list
+type 'a chainRes = (('a arc) list  * id list)
+
+val findChain: int graph -> id -> id -> (int arc) list -> id list -> int chainRes
 
 val findFlow: (int arc) list -> int 
 

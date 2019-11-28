@@ -29,9 +29,9 @@ let () =
 
    
 
-  let res = findFlow( findChain (gmap graph int_of_string) _source _sink [] [] ) in Printf.printf" %d %!" res ; 
+  (*let res = findFlow( fst (findChain (gmap graph int_of_string) _source _sink [] [] )) in Printf.printf"flow : %d ||||| %!" res ; *)
 
-  let res = findChain (gmap graph int_of_string) _source _sink [] []  in List.iter (fun (x,y,z) -> Printf.printf" %d %!"x) (res) ;
+  let res = findChain (gmap graph int_of_string) _source _sink [] []  in List.iter (fun (x,y,z) -> Printf.printf"res : %d %!"x) (fst res) ; 
 
   (* Rewrite the graph that has been read. *)
   (*let () = write_file outfile (gmap(fulk (gmap graph int_of_string) _source _sink)(Int.to_string)) (*; export(outfile)(graph) *) in*)
