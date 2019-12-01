@@ -40,6 +40,19 @@ let rec fulk gr src sink =
     let rec add_chain gr1 ch n =
         (match ch with
         | [] -> gr1
+        | (a,b,_)::rest -> add_chain (add_arc (add_arc gr1 a b (-n)) b a n) rest n )
+
+    in
+        let chain = find_chain gr src sink [] [] in
+            match (find_flow (fst chain)) with
+            | a -> if a == max_int || a == 0 then gr else fulk (add_chain gr (fst chain) a) src sink           
+
+
+let rec fulk_debug gr src sink = 
+
+    let rec add_chain gr1 ch n =
+        (match ch with
+        | [] -> gr1
         | (a,b,_)::rest -> (* Printf.printf" \n Value -> %d %!" n ; *) add_chain (add_arc (add_arc gr1 a b (-n)) b a n) rest n )
 
     in
@@ -47,7 +60,4 @@ let rec fulk gr src sink =
         let chain = find_chain gr src sink [] [] in Printf.printf"\n %!" ; List.iter (fun (x,y,z) ->(Printf.printf"chain : %d -> %d %!" x y)) (List.rev (fst chain));
             match (find_flow (fst chain)) with
             | a ->  Printf.printf"\n flow -> %d %!" a ; Printf.printf"\n %!"; e_iter gr (fun a b v -> Printf.printf" | arc: %d -> %d value: %d %!" a b v);
-            if a == max_int || a == 0 then gr else fulk (add_chain gr (fst chain) a) src sink           
-
-
-(*Printf.printf" %d %!" a ; *) 
+            if a == max_int || a == 0 then gr else fulk (add_chain gr (fst chain) a) src sink    
