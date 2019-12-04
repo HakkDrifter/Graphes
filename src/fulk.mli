@@ -34,4 +34,13 @@ fulk gr src sink
 Maximize the flow between src and sink if a path exist in gr 
 if not path found, flow is already maximal and gr is untouched 
 *)
-val fulk: int graph -> id -> id -> int graph ;;
+val fulk: int graph -> id -> id -> int graph 
+
+val fulk_debug : int graph -> id -> id -> int graph 
+
+(*
+get_flow gr src 
+return the current flow of the graph 
+flow is defined by the sum of the flow in the edges leaving the source 
+*)
+val get_flow : int graph -> id -> int ;;

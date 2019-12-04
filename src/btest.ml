@@ -2,13 +2,15 @@ open Tools
 open Fulk
 open BaseballCase
 open Bfile
+open Graph 
+open Tools
 
 let () =
 
   (* Check the number of command-line arguments *)
   if Array.length Sys.argv <> 3 then
     begin
-      Printf.printf "\nUsage: %s infile team \n\n%!" Sys.argv.(0) ;
+      Printf.printf "\nUsage: %s infile teamID \n\n%!" Sys.argv.(0) ;
       exit 0
     end ;
 
@@ -19,11 +21,17 @@ let () =
   and team = Sys.argv.(2)
   in
 
-(*
+  let teamId = (int_of_string team) in 
 
   (* Open file *)
-  let table = from_file infile in 
+  let table = from_file infile teamId in 
 
-*)
+  (*print_table table ; *)
+
+  let graph = build_graph table in 
+
+  (*print_graph graph ; *)
+
+  if check_state graph table then Printf.printf "team %s is not eliminated %!" team else Printf.printf "team %s is eliminated %!" team ; 
 
   ()

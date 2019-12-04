@@ -9,3 +9,7 @@ let add_arc g id1 id2 n =
     | None -> new_arc(g)(id1)(id2)(n) (*Create arc if it does not exist*)
     | Some(x) -> let newValue = x + n in if newValue < 0 then new_arc(g)(id1)(id2)(0) else new_arc(g)(id1)(id2)(newValue);;
 
+let print_graph gr = 
+  Printf.printf "\n NODES \n %!" ; n_iter gr (fun id -> Printf.printf " %s %!" (string_of_int id) ) ; 
+  Printf.printf "\n EDGES \n %!" ; e_iter gr (fun src dest lb -> Printf.printf "src %d dest %d lb %d -> %!" src dest lb) ;
+  Printf.printf "\n %!"  ;; 
