@@ -27,9 +27,6 @@ let () =
   (* Open file *)
   let graph = from_file infile in 
 
-   
-
-  (*let res = findFlow( fst (findChain (gmap graph int_of_string) _source _sink [] [] )) in Printf.printf"flow : %d ||||| %!" res *)
 
   let res = find_chain (gmap graph int_of_string) _source _sink [] []  in List.iter (fun (x,y,z) -> (Printf.printf"res : %d -> %d %!" x y)) (List.rev (fst res)) 
   ; let flow = find_flow( fst res) in Printf.printf" \n flow -> %d %!" flow ; 

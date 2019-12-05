@@ -42,7 +42,7 @@ let find_flow path = let res = find_flow_rec path in if res == max_int then 0 el
 
 let rec fulk gr src sink = 
 
-    let rec add_chain gr1 ch n =
+    let rec add_chain gr1 ch n = (* adjust all arcs of the found path *)
         (match ch with
         | [] -> gr1
         | (a,b,_)::rest -> add_chain (add_arc (add_arc gr1 a b (-n)) b a n) rest n )
@@ -50,7 +50,7 @@ let rec fulk gr src sink =
     in
         let chain = find_chain gr src sink [] [] in
             match (find_flow (fst chain)) with
-            | a -> if a == max_int || a == 0 then gr else fulk (add_chain gr (fst chain) a) src sink           
+            | a -> if a == 0 then gr else fulk (add_chain gr (fst chain) a) src sink (*do nothing if found flow is 0 or no path found, apply fulk again otherwise*)    
 
 
 let rec fulk_debug gr src sink = 
@@ -68,10 +68,3 @@ let rec fulk_debug gr src sink =
             | a ->  Printf.printf"\n flow -> %d %!" a ; Printf.printf"\n %!"; e_iter gr (fun a b v -> Printf.printf" | arc: %d -> %d value: %d %!" a b v);
             if a == max_int || a == 0 then gr else fulk_debug (add_chain gr (fst chain) a) src sink    
 
-
-
-let rec get_flow gr src = let arcs = out_arcs gr src in List.fold_left (fun sum arc -> sum + snd arc) 0 arcs
-(*
-let loop gr src acu = match gr with 
-| [] -> acu 
-| (id,_)::rest -> let lb = find_arc gr id src *)

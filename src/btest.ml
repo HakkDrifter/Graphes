@@ -32,6 +32,6 @@ let () =
 
   (*print_graph graph ; *)
 
-  if check_state graph table then Printf.printf "team %s is not eliminated %!" team else Printf.printf "team %s is eliminated %!" team ; 
+  if check_state graph table then Printf.printf "\n team %s is not eliminated %!" team else Printf.printf "\n team %s is eliminated %!" team ; 
 
   ()

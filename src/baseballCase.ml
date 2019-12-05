@@ -16,7 +16,7 @@ let sink_node_id = -1
 exception Table_error of string
 
 let cantor_pairing (a,b) = 
-let sort (x,y) = if x < y then (x,y) else (y,x) in 
+let sort (x,y) = if x < y then (x,y) else (y,x) in (* values need to be sorted to give back the same output given two inputs*)
 let vals = sort (a,b) in
 (fst vals + snd vals)*(fst vals + snd vals + 1)/2 + snd vals 
 
@@ -46,15 +46,14 @@ let build_arcs table gr = match table with | (teams,games,st) -> build_game_arcs
 
 let build_graph table = build_arcs table (build_nodes table empty_graph) 
 
-let get_remainingGames team = match team with 
-| (_,_,_,gr) -> gr 
+let get_remaining_capacity_from_source gr src = let arcs = out_arcs gr src in List.fold_left (fun sum arc -> sum + snd arc) 0 arcs
 
-let check_state gr tb = 
-let begin_flow = get_flow gr src_node_id in Printf.printf " \n FLOW BEFORE %d \n %!" begin_flow ;
+let check_state gr tb =   
+let begin_flow = get_remaining_capacity_from_source gr src_node_id in Printf.printf " \n FLOW BEFORE %d \n %!" begin_flow ;
 Printf.printf "\n GRAPH BEFORE \n %!" ; print_graph gr ;
 let final_graph = fulk_debug gr src_node_id sink_node_id in 
 Printf.printf "\n GRAPH AFTER \n %!" ; print_graph final_graph ;
-let final_flow = get_flow (final_graph) src_node_id in
+let final_flow = get_remaining_capacity_from_source (final_graph) src_node_id in
 Printf.printf " \n FLOW AFTER %d \n %!" final_flow ;
 match tb with | (_,_,(_,_,_,tgr)) ->
 if final_flow == 0 then true else false  
@@ -76,5 +75,7 @@ let print_table tb = match tb with | (teams, games, st) ->
 Printf.printf "TEAMS \n %!" ; List.iter (fun (id,w,l,gr) -> Printf.printf "%d %d %d %d \n %!" id w l gr) teams ; 
 Printf.printf "GAMES \n %!" ; List.iter (fun (t1,t2,gid,gr) -> Printf.printf "%d %d %d %d \n %!" t1 t2 gid gr) games;
 Printf.printf "SELECTED TEAM \n %!" ; match st with | (tid,tw,tl,tgr) -> Printf.printf "%d %d %d %d \n %!" tid tw tl tgr
+
+
 
 ;;

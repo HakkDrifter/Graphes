@@ -11,7 +11,7 @@ let read_team id table line stId =
     Printf.printf "Cannot read team in line - %s:\n%s\n%!" (Printexc.to_string e) line ;
     failwith "from_file"
 
-(* Reads a line with an game. *)
+(* Reads a line with a game. *)
 let read_game table line stId =
   try Scanf.sscanf line "g %d %d %d" (fun id1 id2 gr -> if id1 == stId || id2 == stId then table else new_game table id1 id2 gr)
   with e ->
